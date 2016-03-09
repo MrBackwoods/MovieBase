@@ -1,0 +1,12 @@
+c:\users\jonir\documents\visual studio 2013\Projects\MovieBase\MovieBase\bin\Debug\MovieBase.exe.config
+c:\users\jonir\documents\visual studio 2013\Projects\MovieBase\MovieBase\bin\Debug\MovieBase.exe
+c:\users\jonir\documents\visual studio 2013\Projects\MovieBase\MovieBase\bin\Debug\MovieBase.pdb
+c:\users\jonir\documents\visual studio 2013\Projects\MovieBase\MovieBase\obj\Debug\MovieBase.csprojResolveAssemblyReference.cache
+c:\users\jonir\documents\visual studio 2013\Projects\MovieBase\MovieBase\obj\Debug\MovieBase.MovieBase.resources
+c:\users\jonir\documents\visual studio 2013\Projects\MovieBase\MovieBase\obj\Debug\MovieBase.Properties.Resources.resources
+c:\users\jonir\documents\visual studio 2013\Projects\MovieBase\MovieBase\obj\Debug\MovieBase.csproj.GenerateResource.Cache
+c:\users\jonir\documents\visual studio 2013\Projects\MovieBase\MovieBase\obj\Debug\MovieBase.exe
+c:\users\jonir\documents\visual studio 2013\Projects\MovieBase\MovieBase\obj\Debug\MovieBase.pdb
+C:\Users\Jonir\Documents\GitHub\MovieBase\MovieBase\MovieBase\bin\Debug\MovieBase.exe.config
+C:\Users\Jonir\Documents\GitHub\MovieBase\MovieBase\MovieBase\obj\Debug\MovieBase.exe
+C:\Users\Jonir\Documents\GitHub\MovieBase\MovieBase\MovieBase\obj\Debug\MovieBase.pdb
