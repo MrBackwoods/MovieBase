@@ -12,12 +12,14 @@ namespace MovieBase
 {
     class DatabaseHandler
     {
+        // Private variables
         private MySqlConnection connection;
         private string server = "localhost";
         private string database = "DB";
         private string uid = "root";
         private string password = "PW";
 
+        // Function for opening MySQL connection 
         private void  OpenConnection()
         {
         string connectionString = "SERVER=" + server + ";" + "DATABASE=" + database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
@@ -29,23 +31,21 @@ namespace MovieBase
             catch (MySqlException)
             {
                 MessageBox.Show("Cannot connect to server.");
-                Application.Exit();
             }
         }
 
+        // Function for getting movies from database
         public List<Movie> GetMovies()
         {
             List <Movie> movies = new List<Movie>();
             string query = "SELECT * FROM movie";
             OpenConnection();
-
             DataSet tableSet = new DataSet();
             MySqlDataAdapter dataAdapter;
             dataAdapter = new MySqlDataAdapter(query, connection);
             dataAdapter.Fill(tableSet, "result");
             DataTable table = tableSet.Tables["result"];
             CloseConnection(); 
-
             foreach (DataRow row in table.Rows)
             {
                 Movie movie = new Movie();
@@ -57,50 +57,49 @@ namespace MovieBase
                 movie.Review = Convert.ToInt32(row[5]);
                 movies.Add(movie);
             }
-
             CloseConnection();
             return movies;
         }
 
-
+        // Function for updating movie to database
         public void UpdateMovie(Movie movie) {
             OpenConnection();
             string query = "UPDATE movie SET Name='" + movie.Name + "', Review='" + movie.Review + "', Director='" + movie.Director + "', Note='" + movie.Note + "', ReleaseYear='" + movie.ReleaseYear + "' WHERE ID='" + movie.Id + "'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.ExecuteNonQuery();
-            this.CloseConnection();
+            CloseConnection();
         }
 
+        // Function for deleting movie from database
         public void DeleteMovie(int i)
         {
             OpenConnection();
             string query = "DELETE FROM movie WHERE id='" + i + "'";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.ExecuteNonQuery();
-            this.CloseConnection();
+            CloseConnection();
         }
 
+        // Function for adding movie to database
         public void AddMovie()
         {
             OpenConnection();
             string query = "INSERT INTO movie (Review) VALUES(0)";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.ExecuteNonQuery();
-            this.CloseConnection();
+            CloseConnection();
         }
 
-        //Close connection
+        // Function for closing MySQL connection 
         private void CloseConnection()
         {
             try
             {
                 connection.Close();
             }
-            catch (MySqlException )
+            catch (MySqlException)
             {
                 MessageBox.Show("Cannot disconnect from server.");
-                Application.Exit();
-
             }
         }
 

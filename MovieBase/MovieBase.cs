@@ -12,12 +12,19 @@ namespace MovieBase
 {
     public partial class MovieBase : Form
     {
+        //Form has a DatabaseHandler object and a list of Movie objects
         DatabaseHandler DB = new DatabaseHandler();
         List<Movie> movieList = new List<Movie>();
 
+        // Constructor
         public MovieBase()
         {
             InitializeComponent();
+        }
+
+        // Adding columns to the ListView when form loaded and getting movies to the ListView from database
+        private void MovieBase_Load(object sender, EventArgs e)
+        {
             MovieListView.View = View.Details;
             MovieListView.Columns.Add("ID", 40, HorizontalAlignment.Left);
             MovieListView.Columns.Add("Name", 110, HorizontalAlignment.Left);
@@ -25,18 +32,28 @@ namespace MovieBase
             MovieListView.Columns.Add("Director", 120, HorizontalAlignment.Left);
             MovieListView.Columns.Add("Note", 380, HorizontalAlignment.Left);
             MovieListView.Columns.Add("Review", 67, HorizontalAlignment.Left);
+            try
+            {
+                RefreshMovieList();
+            }
+            catch (Exception)
+            {
+                Application.Exit();
+            }
         }
 
-        private void AddNewButton_Click(object sender, EventArgs e)
+        // Function for clearing TextBoxes
+        private void ClearTextBoxes()
         {
-            Movie movie = new Movie();
-            DB.AddMovie();
-            refreshMovieList();
-            clearTextBoxes();
-            DisableTextBoxes();
-
-
+            IDLabel.Text = "";
+            nameBox.Text = "";
+            yearBox.Text = "";
+            directorBox.Text = "";
+            noteBox.Text = "";
+            reviewBox.Text = "";
         }
+
+        // Function for enabling TextBoxes
         private void EnableTextBoxes()
         {
             nameBox.Enabled = true;
@@ -50,9 +67,10 @@ namespace MovieBase
             noteBox.BackColor = System.Drawing.Color.White;
             reviewBox.BackColor = System.Drawing.Color.White;
         }
+
+        // Function for disabling TextBoxes
         public void DisableTextBoxes()
         {
-
             nameBox.Enabled = false;
             yearBox.Enabled = false;
             directorBox.Enabled = false;
@@ -65,14 +83,8 @@ namespace MovieBase
             reviewBox.BackColor = System.Drawing.Color.DimGray;
         }
 
-
-
-        private void MovieBase_Load(object sender, EventArgs e)
-        {
-            refreshMovieList();
-        }
-
-        public void refreshMovieList() {
+        // Function for updating ListView
+        public void RefreshMovieList() {
             movieList = DB.GetMovies();
             MovieListView.Items.Clear();
 
@@ -89,58 +101,40 @@ namespace MovieBase
             }
         }
 
+        // DeleteSelectedButton functionality
         private void DeleteSelectedButton_Click(object sender, EventArgs e)
         {
             if (MovieListView.SelectedItems.Count > 0)
             {
                 DB.DeleteMovie(Convert.ToInt32(MovieListView.SelectedItems[0].Text));
-                refreshMovieList();
-                clearTextBoxes();
+                RefreshMovieList();
+                ClearTextBoxes();
                 DisableTextBoxes();
-
             }
         }
 
-        private void MovieListView_SelectedIndexChanged(object sender, EventArgs e)
+        // AddNewButton functionality
+        private void AddNewButton_Click(object sender, EventArgs e)
         {
-            if (MovieListView.SelectedItems.Count > 0)
-            {
-                clearTextBoxes();
-                EnableTextBoxes();
-                IDLabel.Text = MovieListView.SelectedItems[0].Text;
-                nameBox.Text = MovieListView.SelectedItems[0].SubItems[1].Text;
-                yearBox.Text = MovieListView.SelectedItems[0].SubItems[2].Text;
-                directorBox.Text = MovieListView.SelectedItems[0].SubItems[3].Text;
-                noteBox.Text = MovieListView.SelectedItems[0].SubItems[4].Text;
-                reviewBox.Text = MovieListView.SelectedItems[0].SubItems[5].Text;
-            }
-            else {
-                DisableTextBoxes();
-            }
+            Movie movie = new Movie();
+            DB.AddMovie();
+            RefreshMovieList();
+            ClearTextBoxes();
+            DisableTextBoxes();
         }
 
-        private void clearTextBoxes() {
-            IDLabel.Text = "";
-            nameBox.Text = "";
-            yearBox.Text = "";
-            directorBox.Text = "";
-            noteBox.Text = "";
-            reviewBox.Text = "";
-        }
-
+        // ChangeSelectedButton functionality
         private void ChangeSelectedButton_Click(object sender, EventArgs e)
-
             {
                 if (MovieListView.SelectedItems.Count > 0)
                 {
-
                     int review;
                     bool reviewOk = Int32.TryParse(reviewBox.Text, out review);
                     if (nameBox.Text != "" & reviewBox.Text != "" & reviewOk)
                     {
                         if (review > 0 & review < 6)
                         {
-                            if (yearBox.Text == "" | yearBox.Text.Length == 4)
+                            if (yearBox.Text == "" | yearBox.Text.Length == 4 | yearBox.Text == "Unknown")
                             {
                                 if (noteBox.Text.Length < 200)
                                 {
@@ -148,12 +142,19 @@ namespace MovieBase
                                     movie.Id = Convert.ToInt32(IDLabel.Text);
                                     movie.Name = nameBox.Text;
                                     movie.ReleaseYear = yearBox.Text;
+                                    if (movie.ReleaseYear == "") {
+                                        movie.ReleaseYear = "Unknown";
+                                    }
                                     movie.Director = directorBox.Text;
+                                    if (movie.Director == "")
+                                    {
+                                        movie.Director = "Unknown";
+                                    }
                                     movie.Note = noteBox.Text;
                                     movie.Review = Convert.ToInt32(reviewBox.Text);
                                     DB.UpdateMovie(movie);
-                                    refreshMovieList();
-                                    clearTextBoxes();
+                                    RefreshMovieList();
+                                    ClearTextBoxes();
                                     DisableTextBoxes();
                                     helpLabel.Text = "";
                                 }
@@ -164,7 +165,7 @@ namespace MovieBase
                             }
                             else
                             {
-                                helpLabel.Text = "Year number must be 4 digits long";
+                                helpLabel.Text = "Year number must be 4 digits long.";
                             }
                         }
                         else
@@ -179,9 +180,24 @@ namespace MovieBase
                 }
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        // ListView SelectedIndexChanged functionality
+        private void MovieListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (MovieListView.SelectedItems.Count > 0)
+            {
+                ClearTextBoxes();
+                EnableTextBoxes();
+                IDLabel.Text = MovieListView.SelectedItems[0].Text;
+                nameBox.Text = MovieListView.SelectedItems[0].SubItems[1].Text;
+                yearBox.Text = MovieListView.SelectedItems[0].SubItems[2].Text;
+                directorBox.Text = MovieListView.SelectedItems[0].SubItems[3].Text;
+                noteBox.Text = MovieListView.SelectedItems[0].SubItems[4].Text;
+                reviewBox.Text = MovieListView.SelectedItems[0].SubItems[5].Text;
+            }
+            else
+            {
+                DisableTextBoxes();
+            }
         }
     }
 }
