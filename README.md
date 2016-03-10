@@ -12,7 +12,7 @@ CREATE TABLE `movie` (
   `Name` varchar(100) DEFAULT NULL,
   `Director` varchar(100) DEFAULT NULL,
   `ReleaseYear` varchar(100) DEFAULT NULL,
-  `Note` varchar(300) DEFAULT NULL,
+  `Note` varchar(200) DEFAULT NULL,
   `Review` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
