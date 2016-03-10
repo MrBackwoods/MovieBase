@@ -8,7 +8,7 @@ namespace MovieBase
 {
     class Movie
     {
-        // Object movie has private variables and also getters and setters for those
+        // Object Movie has private variables and also getters and setters for those
         private int id;
         private string name;
         private string director;
